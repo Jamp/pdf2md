@@ -236,12 +236,9 @@ Este proyecto se versiona con git. Para crear el repositorio en GitHub y
 disparar el primer build multiplataforma:
 
 ```bash
-# 1. Crear el repo remoto (requiere gh autenticado) y empujar main
-gh repo create pdf2md --public --source=. --remote=origin --push
-
-# (alternativa manual sin gh)
-# git remote add origin git@github.com:<usuario>/pdf2md.git
-# git push -u origin main
+# 1. Conectar el remoto y empujar la rama master
+git remote add origin git@github.com:<usuario>/pdf2md.git
+git push -u origin master
 
 # 2. Disparar el primer build + release etiquetando una versión
 git tag v0.1.0
