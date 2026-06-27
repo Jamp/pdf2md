@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Degradado del tile: indigo claro -> indigo de marca -> indigo profundo -->
+    <linearGradient id="tileGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset="0.5" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4338ca"/>
+    </linearGradient>
+    <!-- Brillo superior sutil para dar profundidad -->
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Forma del tile para recortar el brillo -->
+    <clipPath id="tileClip">
+      <rect x="100" y="100" width="824" height="824" rx="185"/>
+    </clipPath>
+  </defs>
+
+  <!-- Tile (squircle) -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#tileGrad)"/>
+  <!-- Brillo superior recortado al tile -->
+  <rect x="100" y="100" width="824" height="824" fill="url(#sheen)" clip-path="url(#tileClip)"/>
+
+  <!-- Sombra del documento (índigo profundo, desplazada hacia abajo) -->
+  <path d="M 360 304
+           L 612 304
+           L 716 408
+           L 716 742
+           Q 716 772 686 772
+           L 360 772
+           Q 330 772 330 742
+           L 330 334
+           Q 330 304 360 304 Z"
+        fill="#312e81" opacity="0.30"/>
+
+  <!-- Documento (página blanca con esquina doblada) -->
+  <path d="M 352 290
+           L 604 290
+           L 702 388
+           L 702 730
+           Q 702 760 672 760
+           L 352 760
+           Q 322 760 322 730
+           L 322 320
+           Q 322 290 352 290 Z"
+        fill="#ffffff"/>
+  <!-- Esquina doblada (cara interna) -->
+  <path d="M 604 290 L 702 388 L 604 388 Z" fill="#c7d2fe"/>
+
+  <!-- Líneas de texto (contenido del PDF) -->
+  <rect x="372" y="422" width="216" height="20" rx="10" fill="#c7d2fe"/>
+  <rect x="372" y="462" width="150" height="20" rx="10" fill="#c7d2fe"/>
+
+  <!-- Flecha descendente (transformación / "↓" de Markdown) -->
+  <path d="M 489 506
+           L 535 506
+           L 535 612
+           L 575 612
+           L 512 706
+           L 449 612
+           L 489 612 Z"
+        fill="#6366f1" stroke-linejoin="round"/>
+</svg>

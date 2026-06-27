@@ -1,0 +1,11 @@
+# Dependencias de desarrollo / empaquetado (NO se instalan en runtime).
+# Se instalan en el .venv del proyecto:
+#   .venv/bin/pip install -r requirements-dev.txt
+#
+# PyInstaller genera los bundles (.app en macOS, onedir en Windows/Linux);
+# ver pdf2md.spec, scripts/build_macos.sh y .github/workflows/build.yml.
+pyinstaller==6.21.0
+
+# Render de íconos multiplataforma: scripts/render_logo.py genera el .ico de
+# Windows y el .png de Linux a partir de assets/logo.svg.
+pillow==12.2.0

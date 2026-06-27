@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdf2md"
+version = "1.0.0"
+description = "Aplicación de escritorio ligera para convertir PDF a Markdown."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "jamp" }]
+license = { text = "MIT" }
+dependencies = [
+    "PySide6==6.11.1",
+    "pymupdf4llm==1.27.2.3",
+    "httpx==0.28.1",
+]
+
+[project.scripts]
+pdf2md = "pdf2md.gui:main"
+
+[tool.setuptools]
+packages = ["pdf2md"]
+
+[tool.ruff]
+line-length = 79
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true

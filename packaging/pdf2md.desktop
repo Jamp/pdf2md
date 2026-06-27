@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=pdf2md
+GenericName=Conversor de PDF a Markdown
+Comment=Convierte PDF a Markdown desde un archivo local o una URL
+Exec=pdf2md
+Icon=pdf2md
+Terminal=false
+Categories=Utility;Office;
+Keywords=PDF;Markdown;converter;conversor;

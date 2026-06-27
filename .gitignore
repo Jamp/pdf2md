@@ -1,0 +1,49 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Empaquetado / build
+build/
+dist/
+*.egg-info/
+# Nota: pdf2md.spec SÍ se versiona (build reproducible). Solo se ignoran
+# specs autogenerados con otro nombre.
+*.spec
+!pdf2md.spec
+
+# Salidas de empaquetado de CI (artefactos locales)
+AppDir/
+appimagetool
+*.AppImage
+pdf2md-*.zip
+pdf2md-*.tar.gz
+
+# Herramientas y cobertura
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Sistema operativo
+.DS_Store
+
+# Editores y herramientas locales
+.idea/
+.vscode/
+.claude/
+
+# Salidas locales de prueba
+*.md.out
+/tmp_test_output/
+
+# Iconset intermedio (regenerable con scripts/render_logo.py); el SVG y el
+# .icns SÍ se versionan.
+assets/pdf2md.iconset/
