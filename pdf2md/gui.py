@@ -17,6 +17,7 @@ from pathlib import Path
 from PySide6.QtCore import (
     QMimeData,
     QObject,
+    QSize,
     Qt,
     QThread,
     Signal,
@@ -55,6 +56,7 @@ from pdf2md.converter import (
     convert_pdf_path,
 )
 from pdf2md.downloader import DownloadError, download_pdf
+from pdf2md.icons import lucide_icon
 from pdf2md.theme import (
     DARK,
     LIGHT,
@@ -185,9 +187,9 @@ class DropZone(QFrame):
         layout.setSpacing(4)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        icon = QLabel("📄")
-        icon.setObjectName("dropIcon")
-        icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.icon = QLabel()
+        self.icon.setObjectName("dropIcon")
+        self.icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         title = QLabel("Arrastra un PDF aquí")
         title.setObjectName("dropTitle")
@@ -197,9 +199,14 @@ class DropZone(QFrame):
         hint.setObjectName("dropHint")
         hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        layout.addWidget(icon)
+        layout.addWidget(self.icon)
         layout.addWidget(title)
         layout.addWidget(hint)
+
+    def set_icon_color(self, color: str, size: int = 40) -> None:
+        """Tinta el ícono ``file-up`` de la zona con ``color`` y lo coloca."""
+        icon = lucide_icon("file-up", color, size)
+        self.icon.setPixmap(icon.pixmap(QSize(size, size)))
 
     def setEnabled(self, enabled: bool) -> None:  # noqa: D102
         super().setEnabled(enabled)
@@ -317,9 +324,17 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.drop_zone)
 
         # Separador "o desde una URL".
-        url_label = QLabel("🔗  Desde una URL")
+        url_label_row = QHBoxLayout()
+        url_label_row.setSpacing(7)
+        self.url_icon = QLabel()
+        self.url_icon.setObjectName("sectionIcon")
+        self.url_icon.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        url_label = QLabel("Desde una URL")
         url_label.setObjectName("sectionLabel")
-        layout.addWidget(url_label)
+        url_label_row.addWidget(self.url_icon)
+        url_label_row.addWidget(url_label)
+        url_label_row.addStretch(1)
+        layout.addLayout(url_label_row)
 
         url_row = QHBoxLayout()
         url_row.setSpacing(10)
@@ -364,11 +379,11 @@ class MainWindow(QMainWindow):
         head.addWidget(out_label)
         head.addStretch(1)
 
-        self.btn_copy = QPushButton("📋  Copiar")
+        self.btn_copy = QPushButton("Copiar")
         self.btn_copy.setObjectName("ghostButton")
         self.btn_copy.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_copy.clicked.connect(self._on_copy)
-        self.btn_save = QPushButton("💾  Guardar .md")
+        self.btn_save = QPushButton("Guardar .md")
         self.btn_save.setObjectName("ghostButton")
         self.btn_save.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_save.clicked.connect(self._on_save)
@@ -406,10 +421,40 @@ class MainWindow(QMainWindow):
         app = QApplication.instance()
         if app is not None:
             app.setStyleSheet(build_qss(self._palette))
-        # Icono coherente: luna cuando está oscuro (clic -> claro) y sol al revés.
-        self.btn_theme.setText(
-            "☀" if self._palette.mode is ThemeMode.DARK else "🌙"
-        )
+        self._apply_icons()
+
+    def _apply_icons(self) -> None:
+        """Regenera todos los íconos Lucide tintados al color del tema actual.
+
+        Se invoca en cada cambio de tema para que los íconos sigan al color de
+        la nueva paleta. El toggle muestra ``sun`` en tema oscuro (clic → claro)
+        y ``moon`` en tema claro (clic → oscuro). Todos los íconos del *chrome*
+        comparten la familia Lucide, monocromos y tintados.
+        """
+        p = self._palette
+        secondary = p.text_secondary
+
+        # Toggle de tema: sol en oscuro, luna en claro.
+        theme_icon = "sun" if p.mode is ThemeMode.DARK else "moon"
+        self.btn_theme.setIcon(lucide_icon(theme_icon, secondary, 20))
+        self.btn_theme.setIconSize(QSize(20, 20))
+
+        # Zona de arrastre: ícono grande tintado al texto secundario.
+        self.drop_zone.set_icon_color(secondary, 40)
+
+        # Etiqueta "Desde una URL": ícono link pequeño junto al texto.
+        link = lucide_icon("link", secondary, 16)
+        self.url_icon.setPixmap(link.pixmap(QSize(16, 16)))
+
+        # Botón primario "Convertir": flecha sobre el color de acento.
+        self.btn_url.setIcon(lucide_icon("arrow-right", p.accent_text, 18))
+        self.btn_url.setIconSize(QSize(18, 18))
+
+        # Botones ghost "Copiar" y "Guardar .md".
+        self.btn_copy.setIcon(lucide_icon("copy", secondary, 18))
+        self.btn_copy.setIconSize(QSize(18, 18))
+        self.btn_save.setIcon(lucide_icon("save", secondary, 18))
+        self.btn_save.setIconSize(QSize(18, 18))
 
     def _toggle_theme(self) -> None:
         self._palette = (
